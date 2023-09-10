@@ -6,7 +6,8 @@ const StepsContext = createContext();
 // Create a provider component
 export function StepsProvider({ children }) {
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const [step, setStep] = useState("");
+  const [step, setStep] = useState("all_reports");
+
   const [processing, setProcessing] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
   const [showAllReports, setShowAllReports] = useState(false);

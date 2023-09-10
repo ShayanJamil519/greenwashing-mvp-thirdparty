@@ -91,6 +91,7 @@ const Report = ({ data, activeTab }) => {
     <>
       {data.map((report, index) => (
         <div
+          key={index}
           // onClick={() => setStep("specific_report")}
           onClick={() => handleNavigate(report.companyName)}
           style={{
@@ -109,7 +110,7 @@ const Report = ({ data, activeTab }) => {
           </p>
 
           <p className="text-[#6C7275] text-sm mb-1">
-            Age :<span className="text-[#000] font-semibold ml-2">Average</span>
+            Age :<span className="text-[#000] font-semibold ml-2">Recent</span>
           </p>
 
           <p className="text-[#6C7275] text-sm mb-1 flex items-center">

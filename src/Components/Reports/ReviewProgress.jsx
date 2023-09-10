@@ -3,8 +3,7 @@ import BackButton from "../Shared/BackButton";
 import { useStepsContext } from "../../Context/StateContext";
 
 // ----------------------------
-const SpecificReport = () => {
-  const [showCaseStatus, setShowCaseStatus] = useState(false);
+const ReviewProgress = () => {
   const { setStep, currentCountry } = useStepsContext();
   const [predict, setPredict] = useState(
     "In the Sustainability Report, it is stated that Bank of America achieved carbon neutrality for its operations in 2019. However, in Twitter, there is a tweet from 2021 mentioning the goal of transitioning to a low-carbon economy, suggesting that carbon neutrality may not have been achieved by 2021.  The Sustainability Report mentions that Bank of America joined the Net-Zero Banking Alliance (NZBA) in 2021, but there is no mention of this in Twitter or Carbon offsets sheets. In the Sustainability Report sheet, it is stated that Bank of America achieved its 100% renewable electricity goal in 2019. However, there is no mention of this in the Twitter or Carbon offsets sheets."
@@ -16,17 +15,9 @@ const SpecificReport = () => {
     "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
   );
 
-  const handleOpenCase = () => {
-    setShowCaseStatus(!showCaseStatus);
-
-    setTimeout(() => {
-      setStep("review_progress");
-    }, 2000);
-  };
-
   return (
     <div>
-      <BackButton setStep={() => setStep("all_reports")} />
+      <BackButton setStep={() => setStep("specific_report")} />
 
       {/* Specific Report */}
       <div
@@ -43,7 +34,7 @@ const SpecificReport = () => {
             <p className="mb-2 text-sm text-[#2c2d2e] font-semibold">
               Sep 8, 2023
             </p>
-            <img src="./assets/pending__to__review.png" alt="logo" />
+            <img src="./assets/review__in__progress.png" alt="logo" />
           </div>
           <h1 className="mb-5 text-[#000] text-2xl font-bold">
             {currentCountry}
@@ -148,53 +139,15 @@ const SpecificReport = () => {
             Data source:
             <span className="text-[#000] font-semibold ml-2">Twitter</span>
           </p>
-
-          <hr className="bg-[#E8ECEF] my-3" />
-
-          {/* case status */}
-          {showCaseStatus && (
-            <div>
-              <p className="font-semibold text-xl mb-3">Case Status:</p>
-              <p className="text-[#6C7275] text-base mb-1 font-semibold">
-                Case opened by:
-                <span className="text-[#000] font-semibold ml-2">
-                  {" "}
-                  John Doe (case file officer)
-                </span>
-              </p>
-              <p className="text-[#6C7275] text-base mb-1 font-semibold">
-                Timestamp:
-                <span className="text-[#000] font-semibold ml-2">
-                  Sep-8-2023 12:40:00 AM
-                </span>
-              </p>
-
-              <div className="p-3 mt-7 mb-5 border-[1px] rounded-lg border-[#b6bdc0] flex flex-col gap-2">
-                <label className="text-[#6C7275]">Case assigned to</label>
-                <input
-                  type="text"
-                  className="border-none focus:outline-none w-full"
-                />
-              </div>
-
-              <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg border-[#b6bdc0] flex flex-col gap-2">
-                <label className="text-[#6C7275]">Comment (optional)</label>
-                <input
-                  type="text"
-                  className="border-none focus:outline-none w-full"
-                />
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Button */}
         <div className="mt-7">
           <button
-            onClick={handleOpenCase}
+            // onClick={handleOpenCase}
             className="bg-[#3FDD78] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
           >
-            {showCaseStatus ? "Save" : "Open case"}
+            Save{" "}
           </button>
         </div>
       </div>
@@ -202,4 +155,4 @@ const SpecificReport = () => {
   );
 };
 
-export default SpecificReport;
+export default ReviewProgress;
