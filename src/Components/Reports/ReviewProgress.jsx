@@ -20,9 +20,9 @@ const ReviewProgress = () => {
   const [hash, setHash] = useState(
     "QmWX2Y31vu94XquQsgjzEdXpDtT4fnJZKETxM2fEseoWiU"
   );
-  const [etherscanURL, setEtherscanURL] = useState(
-    "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
-  );
+  // const [etherscanURL, setEtherscanURL] = useState(
+  //   "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
+  // );
 
   return (
     <div>
@@ -83,7 +83,7 @@ const ReviewProgress = () => {
                     {hash}
                   </a>
                 </p>
-                <p className="text-[#6C7275] text-base">
+                {/* <p className="text-[#6C7275] text-base">
                   <span className="font-bold"> Etherscan URL: </span>
                   <a
                     href={etherscanURL}
@@ -94,7 +94,7 @@ const ReviewProgress = () => {
                     {" "}
                     {etherscanURL}{" "}
                   </a>
-                </p>
+                </p> */}
               </>
             )}
           </div>

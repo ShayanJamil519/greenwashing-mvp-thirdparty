@@ -12,16 +12,16 @@ const SpecificReport = () => {
   const [hash, setHash] = useState(
     "QmWX2Y31vu94XquQsgjzEdXpDtT4fnJZKETxM2fEseoWiU"
   );
-  const [etherscanURL, setEtherscanURL] = useState(
-    "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
-  );
+  // const [etherscanURL, setEtherscanURL] = useState(
+  //   "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
+  // );
 
   const handleOpenCase = () => {
     if (showCaseStatus) {
-      console.log("move to next step");
+      // console.log("move to next step");
       setStep("review_progress");
     } else {
-      console.log("show krwao");
+      // console.log("show krwao");
       setShowCaseStatus(!showCaseStatus);
     }
 
@@ -89,7 +89,7 @@ const SpecificReport = () => {
                     {hash}
                   </a>
                 </p>
-                <p className="text-[#6C7275] text-base">
+                {/* <p className="text-[#6C7275] text-base">
                   <span className="font-bold"> Etherscan URL: </span>
                   <a
                     href={etherscanURL}
@@ -100,7 +100,7 @@ const SpecificReport = () => {
                     {" "}
                     {etherscanURL}{" "}
                   </a>
-                </p>
+                </p> */}
               </>
             )}
           </div>

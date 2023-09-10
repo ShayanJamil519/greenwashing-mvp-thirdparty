@@ -11,12 +11,12 @@ import { useEffect } from "react";
 function App() {
   const {openLoginModal, setOpenLoginModal}  = useStepsContext()
 
-  // useEffect(()=>{
+  useEffect(()=>{
 
-  //   setOpenLoginModal(!openLoginModal)
+    setOpenLoginModal(!openLoginModal)
 
 
-  // }, [])
+  }, [])
 
   return (
     <div className="App">
