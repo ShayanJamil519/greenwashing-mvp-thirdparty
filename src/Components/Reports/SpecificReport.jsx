@@ -17,11 +17,17 @@ const SpecificReport = () => {
   );
 
   const handleOpenCase = () => {
-    setShowCaseStatus(!showCaseStatus);
-
-    setTimeout(() => {
+    if (showCaseStatus) {
+      console.log("move to next step");
       setStep("review_progress");
-    }, 2000);
+    } else {
+      console.log("show krwao");
+      setShowCaseStatus(!showCaseStatus);
+    }
+
+    // setTimeout(() => {
+    //   setStep("review_progress");
+    // }, 2000);
   };
 
   return (

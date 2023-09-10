@@ -7,11 +7,13 @@ import ReviewProgress from "../Components/Reports/ReviewProgress";
 const Reports = () => {
   const { step } = useStepsContext();
 
+  console.log("step::::::: ", step);
+
   return (
     <div>
       {step === "all_reports" && <AllReports />}
       {step === "specific_report" && <SpecificReport />}
-      {step === "review_progress " && <ReviewProgress />}
+      {step === "review_progress" && <ReviewProgress />}
     </div>
   );
 };
