@@ -1,42 +1,20 @@
 import React, { useRef, useEffect, useState } from "react";
 import BackButton from "../Shared/BackButton";
 import { useStepsContext } from "../../Context/StateContext";
-import { useReactToPrint } from "react-to-print";
-import { create } from "ipfs-http-client";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { smartContract } from "../../Constants";
-import { ethers } from "ethers";
-
-// IPFS
-const projectId = "2V6620s2FhImATdUuY4dwIAqoI0";
-const projectSecret = "2dcb0a633ee912e06834a43a3083248e";
-
-const auth =
-  "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
-
-const ipfs = create({
-  host: "ipfs.infura.io",
-  port: 5001,
-  protocol: "https",
-  headers: {
-    authorization: auth,
-  },
-});
 
 // ----------------------------
 const SpecificReport = () => {
-  const { setStep, currentCountry, description } = useStepsContext();
+  const { setStep, currentCountry } = useStepsContext();
   const [predict, setPredict] = useState(
-    "A/B Group PLC provide contradictory statements as it claim to be green, carbon-neutral or Net Zero by 2030. The three concepts are either ambiguous (i.e. green) or contradictory, as the scope of Net Zero differs from the one of carbon neutral."
+    "In the Sustainability Report, it is stated that Bank of America achieved carbon neutrality for its operations in 2019. However, in Twitter, there is a tweet from 2021 mentioning the goal of transitioning to a low-carbon economy, suggesting that carbon neutrality may not have been achieved by 2021.  The Sustainability Report mentions that Bank of America joined the Net-Zero Banking Alliance (NZBA) in 2021, but there is no mention of this in Twitter or Carbon offsets sheets. In the Sustainability Report sheet, it is stated that Bank of America achieved its 100% renewable electricity goal in 2019. However, there is no mention of this in the Twitter or Carbon offsets sheets."
   );
   // Print Report
   const printRef = useRef();
   const [hash, setHash] = useState(
-    "74843f65ecfebbe8222e0ca8e971180ba180bd6d18c1a5336acae720d44f6dc"
+    "QmWX2Y31vu94XquQsgjzEdXpDtT4fnJZKETxM2fEseoWiU"
   );
   const [etherscanURL, setEtherscanURL] = useState(
-    "https://sepolia.etherscan.io/address/0x008304060777174473caad642885846d1c969368"
+    "https://sepolia.etherscan.io/tx/0x475fca847e2b37be5ee38c94761573f13ce723f7288a8e636a199a03f7fa5e7c"
   );
   // const [uploadReport, setUploadReport] = useState("");
 
@@ -51,28 +29,39 @@ const SpecificReport = () => {
           boxShadow:
             "0px 33px 32px -16px rgba(0, 0, 0, 0.10), 0px 0px 16px 4px rgba(0, 0, 0, 0.04)",
         }}
-        className="w-[70%] mx-auto my-10 p-5 rounded-xl"
+        className="w-[80%] mx-auto my-10 p-5 rounded-xl"
       >
         {/* Top */}
 
         <div className="mb-7">
-          <p className="mb-2 text-sm text-[#2c2d2e] font-semibold">
-            Aug, 24, 2023
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="mb-2 text-sm text-[#2c2d2e] font-semibold">
+              Sep 8, 2023
+            </p>
+            <img src="./assets/pending__to__review.png" alt="logo" />
+          </div>
           <h1 className="mb-5 text-[#000] text-2xl font-bold">
             {currentCountry}
           </h1>
           <p className="text-[#6C7275] text-base mb-1 font-semibold">
             Jurisdiction :
-            <span className="text-[#000] font-semibold ml-2">Ireland</span>
+            <span className="text-[#000] font-semibold ml-2">USA</span>
           </p>
 
           <p className="text-[#6C7275] text-base font-semibold mb-1">
-            Data sources: :
+            Data sources:
             <span className="text-[#000] font-semibold ml-2">
-              2022 Sustainability Report, Twitter post 2021
+              Sustainability Report, Twitter
             </span>
           </p>
+
+          <p className="text-[#6C7275] text-base font-semibold mb-1">
+            Timestamp:
+            <span className="text-[#000] font-semibold ml-2">
+              Sep-8-2023 12:40:00 AM
+            </span>
+          </p>
+
           {/* Links */}
           <div className="">
             {hash && (
@@ -131,16 +120,26 @@ const SpecificReport = () => {
 
         {/* Claims */}
         <div>
-          <p className="text-[#6C7275] font-semibold mb-3">
-            Sustainability claims:
-          </p>
+          <p className="text-[#6C7275] font-semibold mb-3">Claim #1:</p>
           <p className="font-semibold text-[#000]">
-            In 2019 we made €5 b available for green projects and last year we
-            set a target for 70% of our lending to be green by 2030. We also
-            became the first Irish bank to pledge to operate as carbon neutral
-            by 2030
+            We achieved carbon neutrality and our 100% renewable electricity
+            goal in 2019.
           </p>
-          <p className="text-[#6C7275] text-sm mt-3 font-semibold">
+          <p className="text-[#6C7275] text-sm mt-1  mb-5 font-semibold">
+            Data source:
+            <span className="text-[#000] font-semibold ml-2">
+              Sustainability Report
+            </span>
+          </p>
+
+          <p className="text-[#6C7275] font-semibold mb-3">Claim #2:</p>
+
+          <p className="font-semibold text-[#000]">
+            Transitioning to a low-carbon economy is essential, but it's crucial
+            to stay realistic. Achieving carbon neutrality by 2021 might be a
+            challenging goal. Let's keep working towards a greener future!
+          </p>
+          <p className="text-[#6C7275] text-sm mt-1 font-semibold">
             Data source:
             <span className="text-[#000] font-semibold ml-2">Twitter</span>
           </p>

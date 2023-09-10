@@ -99,21 +99,13 @@ const Report = ({ data, activeTab }) => {
           }}
           className="min-w-[31%] p-4 cursor-pointer rounded-xl hover:border-[1px] hover:border-black  "
         >
-          <p className="mb-2 text-sm text-[#6C7275]">{report.date}</p>
+          <p className="mb-2 text-sm text-[#6C7275]">#00001</p>
           <h1 className="mb-3 text-[#000] text-xl font-semibold">
-            {report.companyName}
+            Bank of America
           </h1>
           <p className="text-[#6C7275] text-sm mb-1">
             Jurisdiction :
-            <span className="text-[#000] font-semibold ml-2 ">
-              {report.jurisdiction}
-            </span>
-          </p>
-          <p className="text-[#6C7275] text-sm mb-1">
-            Data sources :
-            <span className="text-[#000] font-semibold ml-2">
-              Sustainability Report, Twitter post
-            </span>
+            <span className="text-[#000] font-semibold ml-2 ">USA</span>
           </p>
 
           <p className="text-[#6C7275] text-sm mb-1">

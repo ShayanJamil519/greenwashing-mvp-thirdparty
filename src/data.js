@@ -1,8 +1,8 @@
 export const allReportsData=[
     {
         date:"Aug, 24, 2023",
-        companyName:"A/B Group PLC",
-        jurisdiction:"Ireland"
+        companyName:"Bank of America",
+        jurisdiction:"USA"
     },
    
 ]
