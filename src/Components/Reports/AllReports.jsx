@@ -1,11 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { allReportsData, allReportsSentToRegulatorsData } from "../../data";
+import React, { useState } from "react";
+// import { allReportsData } from "../../data";
 import { useStepsContext } from "../../Context/StateContext";
-import axios from "axios";
+import {
+  useGetAllPendingReports,
+  useGetAllUnderReviewReports,
+} from "../../Hooks/reports-hooks";
 
 const AllReports = () => {
   const [activeTab, setActiveTab] = useState(1);
-  const { setStep, rows } = useStepsContext();
+  // const { setStep, rows } = useStepsContext();
+
+  const { data: pendingReportsData } = useGetAllPendingReports();
+  // const { data: reviewReportsData } = useGetAllUnderReviewReports();
+
+  // console.log("reviewReportsData");
+  // console.log(reviewReportsData);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -61,15 +70,8 @@ const AllReports = () => {
 
       {/* Reports Container */}
       <div className="w-full gap-7 grid grid-cols-3">
-        {/* {activeTab === 1 ? (
-          // <Report data={allReportsData} />
-
-          <Report data={allReportsData} activeTab={1} />
-        ) : (
-          <Report data={allReportsData} activeTab={2} />
-        )} */}
-
-        <Report data={allReportsData} />
+        {activeTab === 1 && <Report data={pendingReportsData} />}
+        {/* {activeTab === 2 && <Report data={reviewReportsData} />} */}
       </div>
     </div>
   );
@@ -82,51 +84,55 @@ const Report = ({ data, activeTab }) => {
 
   const handleNavigate = async (report) => {
     setCurrentCountry(report);
-    console.log("report: ", report);
+    // console.log("report: ", report);
 
     setStep("specific_report");
   };
 
   return (
     <>
-      {data.map((report, index) => (
-        <div
-          // onClick={() => setStep("specific_report")}
-          onClick={() => handleNavigate(report.companyName)}
-          style={{
-            boxShadow:
-              " 0px 33px 32px -16px rgba(0, 0, 0, 0.10), 0px 0px 16px 4px rgba(0, 0, 0, 0.04)",
-          }}
-          className="min-w-[31%] p-4 cursor-pointer rounded-xl hover:border-[1px] hover:border-black  "
-        >
-          <p className="mb-2 text-sm text-[#6C7275]">{report.date}</p>
-          <h1 className="mb-3 text-[#000] text-xl font-semibold">
-            {report.companyName}
-          </h1>
-          <p className="text-[#6C7275] text-sm mb-1">
-            Jurisdiction :
-            <span className="text-[#000] font-semibold ml-2 ">
-              {report.jurisdiction}
-            </span>
-          </p>
-          <p className="text-[#6C7275] text-sm mb-1">
-            Data sources :
-            <span className="text-[#000] font-semibold ml-2">
-              Sustainability Report, Twitter post
-            </span>
-          </p>
-
-          <p className="text-[#6C7275] text-sm mb-1">
-            Age :<span className="text-[#000] font-semibold ml-2">Average</span>
-          </p>
-
-          <p className="text-[#6C7275] text-sm mb-1 flex items-center">
-            Priority :
-            <div className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></div>
-            <span className="text-[#000] font-semibold ml-2">Medium</span>
-          </p>
-        </div>
-      ))}
+      {data?.results
+        ? data?.results.map((report, index) => (
+            <div
+              key={index}
+              // onClick={() => setStep("specific_report")}
+              onClick={() => handleNavigate(report?.companyName)}
+              style={{
+                boxShadow:
+                  " 0px 33px 32px -16px rgba(0, 0, 0, 0.10), 0px 0px 16px 4px rgba(0, 0, 0, 0.04)",
+              }}
+              className="min-w-[31%] p-4 cursor-pointer rounded-xl hover:border-[1px] hover:border-black  "
+            >
+              <p className="mb-2 text-sm text-[#6C7275]">{report?.timeStamp}</p>
+              <h1 className="mb-3 text-[#000] text-xl font-semibold">
+                {report?.companyName}
+              </h1>
+              <p className="text-[#6C7275] text-sm mb-1">
+                Jurisdiction :
+                <span className="text-[#000] font-semibold ml-2 ">Ireland</span>
+              </p>
+              <p className="text-[#6C7275] text-sm mb-1">
+                Data sources :
+                <span className="text-[#000] font-semibold ml-2">
+                  Sustainability Report, Twitter post
+                </span>
+              </p>
+              <p className="text-[#6C7275] text-sm mb-1">
+                Age :
+                <span className="text-[#000] font-semibold ml-2">
+                  {report?.age}
+                </span>
+              </p>
+              <p className="text-[#6C7275] text-sm mb-1 flex items-center">
+                Priority :
+                <div className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></div>
+                <span className="text-[#000] font-semibold ml-2">
+                  {report?.priority}
+                </span>
+              </p>
+            </div>
+          ))
+        : data?.message && <p>{data?.message}</p>}
     </>
   );
 };
