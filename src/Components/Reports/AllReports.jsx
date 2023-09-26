@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useStepsContext } from "../../Context/StateContext";
 import {
   useGetAllPendingReports,
+  useGetAllReviewedReports,
   useGetAllUnderReviewReports,
 } from "../../Hooks/reports-hooks";
 
@@ -11,10 +12,8 @@ const AllReports = () => {
   // const { setStep, rows } = useStepsContext();
 
   const { data: pendingReportsData } = useGetAllPendingReports();
-  // const { data: reviewReportsData } = useGetAllUnderReviewReports();
-
-  // console.log("reviewReportsData");
-  // console.log(reviewReportsData);
+  const { data: reviewReportsData } = useGetAllUnderReviewReports();
+  const { data: reviewedReportsData } = useGetAllReviewedReports();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -71,7 +70,8 @@ const AllReports = () => {
       {/* Reports Container */}
       <div className="w-full gap-7 grid grid-cols-3">
         {activeTab === 1 && <Report data={pendingReportsData} />}
-        {/* {activeTab === 2 && <Report data={reviewReportsData} />} */}
+        {activeTab === 2 && <Report data={reviewReportsData} />}
+        {activeTab === 3 && <Report data={reviewedReportsData} />}
       </div>
     </div>
   );
@@ -125,7 +125,7 @@ const Report = ({ data, activeTab }) => {
               </p>
               <p className="text-[#6C7275] text-sm mb-1 flex items-center">
                 Priority :
-                <div className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></div>
+                <span className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></span>
                 <span className="text-[#000] font-semibold ml-2">
                   {report?.priority}
                 </span>

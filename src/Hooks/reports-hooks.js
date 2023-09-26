@@ -3,14 +3,20 @@ import { useQuery } from "@tanstack/react-query";
 import ReportService from "../Services/reports-services"
 
 const useGetAllPendingReports = () => {
-    return useQuery({  queryKey: ['/api/report/getPendingReports'],  queryFn: () => ReportService.getAllPendingReports()
+    return useQuery({  queryKey: ['getPendingReports'],  queryFn: () => ReportService.getAllPendingReports()
   })
 };
 
 
 
 const useGetAllUnderReviewReports = () => {
-    return useQuery({  queryKey: ['/api/report/getAllUnderReviewReports'],  queryFn: () => ReportService.getAllUnderReviewReports()
+    return useQuery({  queryKey: ['getAllUnderReviewReports'],  queryFn: () => ReportService.getAllUnderReviewReports()
+  })
+};
+
+
+const useGetAllReviewedReports = () => {
+    return useQuery({  queryKey: ['getAllReviewedReports'],  queryFn: () => ReportService.getAllReviewedReports()
   })
 };
 
@@ -18,4 +24,4 @@ const useGetAllUnderReviewReports = () => {
 
 
 
-export { useGetAllPendingReports, useGetAllUnderReviewReports };
+export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports };

@@ -19,8 +19,17 @@ class ReportService {
    */
   async getAllUnderReviewReports() {
     const {data} = await axios.get(`${apiUrl}/api/report/getAllUnderReviewReports`);
-    console.log("data   ")
-    console.log(data)
+    return data
+  }
+
+
+  
+   /**
+   * getAllReviewedReports
+   * @returns
+   */
+  async getAllReviewedReports() {
+    const {data} = await axios.get(`${apiUrl}/api/report/getAllReviewedReports`);
     return data
   }
 
