@@ -34,6 +34,33 @@ class ReportService {
   }
 
 
+  /**
+   * getAllReviewedReports
+   * @returns
+   */
+    async assignCase(reportData) {
+    console.log("Hello");
+    const res = await axios.put(`${apiUrl}/api/report/assignCase`, reportData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res;
+  }
+
+
+  /**
+   * getSingleReportDetail
+   * @returns
+   */
+    async getSingleReportDetail(company) {
+    const {data} = await axios.get(`${apiUrl}/api/report/getSingleReportDetail?company=${company}`)
+    return data;
+  }
+
+
+
+
   
 
   

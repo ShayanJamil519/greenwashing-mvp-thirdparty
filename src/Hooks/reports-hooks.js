@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import ReportService from "../Hooks/reports-hook"
 import ReportService from "../Services/reports-services"
 
@@ -23,5 +23,33 @@ const useGetAllReviewedReports = () => {
 
 
 
+const useGetSingleReportDetails = (company) => {
+  return useQuery({
+    queryKey: ["getSingleReportDetail"], 
+    queryFn: () => ReportService.getSingleReportDetail(company),
+  });
+};
 
-export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports };
+
+
+const useAssignCase = (reportData) => {
+  // console.log(reportData)
+  const queryClient = useQueryClient();
+  return useMutation(
+    () => {
+      return ReportService.assignCase(reportData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("resetPassword");
+      },
+    }
+  );
+};
+
+
+
+
+
+
+export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports, useAssignCase, useGetSingleReportDetails };

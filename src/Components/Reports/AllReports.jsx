@@ -80,10 +80,10 @@ const AllReports = () => {
 export default AllReports;
 
 const Report = ({ data, activeTab }) => {
-  const { setStep, setCurrentCountry } = useStepsContext();
+  const { setStep, setCompany } = useStepsContext();
 
   const handleNavigate = async (report) => {
-    setCurrentCountry(report);
+    setCompany(report);
     // console.log("report: ", report);
 
     setStep("specific_report");

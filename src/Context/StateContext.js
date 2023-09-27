@@ -11,7 +11,7 @@ export function StepsProvider({ children }) {
   const [requestLoading, setRequestLoading] = useState(false);
   const [showAllReports, setShowAllReports] = useState(false);
   const [rows, setRows] = useState();
-  const [currentCountry, setCurrentCountry] = useState();
+  const [company, setCompany] = useState();
   const [description, setDescription] = useState();
 
   return (
@@ -29,8 +29,8 @@ export function StepsProvider({ children }) {
         setShowAllReports,
         rows,
         setRows,
-        currentCountry,
-        setCurrentCountry,
+        company,
+        setCompany,
         description,
         setDescription,
       }}
