@@ -32,6 +32,41 @@ const useGetSingleReportDetails = (company) => {
 
 
 
+const useGetChangeStatusToReview = (company) => {
+  // console.log(reportData)
+  const queryClient = useQueryClient();
+  return useMutation(
+    () => {
+      return ReportService.getChangeStatusToReview(company);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("changeStatusToReview");
+      },
+    }
+  );
+};
+
+
+
+const useCloseCase = (company) => {
+  // console.log(reportData)
+  const queryClient = useQueryClient();
+  return useMutation(
+    () => {
+      return ReportService.closeCase(company);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("closeCase");
+      },
+    }
+  );
+};
+
+
+
+
 const useAssignCase = (reportData) => {
   // console.log(reportData)
   const queryClient = useQueryClient();
@@ -41,7 +76,23 @@ const useAssignCase = (reportData) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("resetPassword");
+        queryClient.invalidateQueries("assignCase");
+      },
+    }
+  );
+};
+
+
+const useUpdateCase = (reportData) => {
+  // console.log(reportData)
+  const queryClient = useQueryClient();
+  return useMutation(
+    () => {
+      return ReportService.updateCase(reportData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("updateCase");
       },
     }
   );
@@ -52,4 +103,4 @@ const useAssignCase = (reportData) => {
 
 
 
-export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports, useAssignCase, useGetSingleReportDetails };
+export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports,useCloseCase, useGetChangeStatusToReview ,useAssignCase, useUpdateCase, useGetSingleReportDetails };

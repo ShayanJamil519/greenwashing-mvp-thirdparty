@@ -9,7 +9,10 @@ import { toast } from "react-toastify";
 // import { ethers } from "ethers";
 import {
   useAssignCase,
+  useCloseCase,
+  useGetChangeStatusToReview,
   useGetSingleReportDetails,
+  useUpdateCase,
 } from "../../Hooks/reports-hooks";
 import { formattedDate } from "../../utils/date";
 
@@ -31,8 +34,13 @@ const ipfs = create({
 
 // ----------------------------
 const SpecificReport = () => {
-  const [showCaseStatusStep1, setShowCaseStatusStep1] = useState(true);
+  const [showCaseStatusStep0, setShowCaseStatusStep0] = useState(true);
+  const [showCaseStatusStep1, setShowCaseStatusStep1] = useState(false);
   const [showCaseStatusStep2, setShowCaseStatusStep2] = useState(false);
+  const [showCaseStatusStep3Update, setShowCaseStatusStep3Update] =
+    useState(false);
+  const [showCaseStatusStep4Final, setShowCaseStatusStep4Final] =
+    useState(false);
   const { setStep, company, description } = useStepsContext();
   const [predict, setPredict] = useState(
     "A/B Group PLC provide contradictory statements as it claim to be green, carbon-neutral or Net Zero by 2030. The three concepts are either ambiguous (i.e. green) or contradictory, as the scope of Net Zero differs from the one of carbon neutral."
@@ -45,6 +53,36 @@ const SpecificReport = () => {
   const [etherscanURL, setEtherscanURL] = useState(
     "https://sepolia.etherscan.io/address/0x008304060777174473caad642885846d1c969368"
   );
+
+  // useGetChangeStatusToReview;
+  const {
+    mutate: addMutateChangeStatusToReview,
+    isLoading: changeStatusLoading,
+  } = useGetChangeStatusToReview(
+    JSON.stringify({
+      company,
+      reviewing: "true",
+      pending: "false",
+      reviewed: "false",
+    })
+  );
+
+  const handleChangeStatusCase = async () => {
+    addMutateChangeStatusToReview(
+      {},
+      {
+        onSuccess: (response) => {
+          if (response?.data?.message) {
+            toast.error(response?.data?.message);
+          }
+          if (response?.data?.results) {
+            setShowCaseStatusStep0(false);
+            setShowCaseStatusStep1(true);
+          }
+        },
+      }
+    );
+  };
 
   // AssignCase
   const [reportAssignCaseData, setReportAssignCaseData] = useState({
@@ -93,6 +131,76 @@ const SpecificReport = () => {
     );
   };
 
+  // updateCase
+
+  const [updateReportComment, setUpdateReportComment] = useState("");
+
+  const { mutate: addMutateUpdateCase, isLoading: updateCaseLoading } =
+    useUpdateCase(
+      JSON.stringify({
+        ...updateReportComment,
+        formattedDate,
+
+        company,
+      })
+      // currentCountry
+    );
+
+  const handleUpdateCase = async () => {
+    if (!updateReportComment) {
+      toast.error("Please enter the field");
+      return;
+    }
+
+    addMutateUpdateCase(
+      {},
+      {
+        onSuccess: (response) => {
+          if (response?.data?.message) {
+            toast.error(response?.data?.message);
+          }
+          if (response?.data?.results) {
+            toast.success("Comment has been updated");
+            setShowCaseStatusStep1(false);
+            setShowCaseStatusStep3Update(false);
+            setShowCaseStatusStep4Final(true);
+            //  setShowCaseStatusStep2(true);
+          }
+        },
+      }
+    );
+  };
+
+  // useCloseCase;
+  const { mutate: addMutateCloseCase, isLoading: closeCaseLoading } =
+    useCloseCase(
+      JSON.stringify({
+        company,
+        reviewed: "true",
+        reviewing: "false",
+        pending: "false",
+      })
+      // currentCountry
+    );
+
+  const handleCloseCase = async () => {
+    addMutateCloseCase(
+      {},
+      {
+        onSuccess: (response) => {
+          if (response?.data?.message) {
+            toast.error(response?.data?.message);
+          }
+          if (response?.data?.results) {
+            toast.success("Case has been closed");
+            setShowCaseStatusStep4Final(false);
+            setStep("all_reports");
+          }
+        },
+      }
+    );
+  };
+
   // getSingleReportDetail;
   const { data: singleReportData, isLoading: singleReportLoading } =
     useGetSingleReportDetails(company);
@@ -117,7 +225,31 @@ const SpecificReport = () => {
             <p className="mb-2 text-sm text-[#2c2d2e] font-semibold">
               Sep 8, 2023
             </p>
-            <img src="./assets/pending__to__review.png" alt="logo" />
+
+            {/* <img
+              src={
+                showCaseStatusStep0
+                  ? "./assets/pending__to__review.png"
+                  : showCaseStatusStep4Final
+                  ? "./assets/Review__Completed.png"
+                  : "./assets/review__in__progress.png"
+              }
+              alt="logo"
+            /> */}
+
+            {showCaseStatusStep0 && (
+              <img src="./assets/pending__to__review.png" alt="logo" />
+            )}
+
+            {showCaseStatusStep4Final && (
+              <img src="./assets/Review__Completed.png" alt="logo" />
+            )}
+
+            {(showCaseStatusStep1 ||
+              showCaseStatusStep2 ||
+              showCaseStatusStep3Update) && (
+              <img src="./assets/review__in__progress.png" alt="logo" />
+            )}
           </div>
           <h1 className="mb-5 text-[#000] text-2xl font-bold">{company}</h1>
           <p className="text-[#6C7275] text-base mb-1 font-semibold">
@@ -234,15 +366,15 @@ const SpecificReport = () => {
                 />
               </div>
 
-              <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg border-[#b6bdc0] flex flex-col gap-2">
+              <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
                 <label className="text-[#6C7275]">Comment (optional)</label>
                 <input
                   type="text"
                   name="comment"
-                  placeholder="Comment..."
+                  placeholder="Type here..."
                   value={reportAssignCaseData.comment}
                   onChange={handleInputChange}
-                  className="border-none focus:outline-none w-full font-semibold"
+                  className="border-none focus:outline-none w-full bg-gray-100 font-semibold"
                 />
               </div>
             </div>
@@ -278,7 +410,7 @@ const SpecificReport = () => {
               </p>
 
               {singleReportData?.results[0]?.comment && (
-                <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg border-[#b6bdc0] flex flex-col gap-2">
+                <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
                   <label className="text-[#6C7275]">Comment (optional)</label>
                   <p className="font-semibold text-[#000]">
                     {singleReportLoading
@@ -289,9 +421,100 @@ const SpecificReport = () => {
               )}
             </div>
           )}
+
+          {/* case status step 3 Update */}
+          {showCaseStatusStep3Update && (
+            <>
+              {/* Old comment */}
+              <div className="mt-7">
+                <p className="font-semibold text-xl mb-3">Case Status:</p>
+                <p className="text-[#6C7275] text-base mb-1 font-semibold">
+                  Case opened by:
+                  <span className="text-[#000] font-semibold ml-2">
+                    {" "}
+                    John Doe (case file officer)
+                  </span>
+                </p>
+                <p className="text-[#6C7275] text-base mb-1 font-semibold">
+                  Case assigned to:
+                  <span className="text-[#000] font-semibold ml-2">
+                    {" "}
+                    {singleReportLoading
+                      ? "Loading..."
+                      : singleReportData?.results[0]?.assignedTo}
+                  </span>
+                </p>
+                <p className="text-[#6C7275] text-base mb-1 font-semibold">
+                  Timestamp:
+                  <span className="text-[#000] font-semibold ml-2">
+                    {singleReportLoading
+                      ? "Loading..."
+                      : singleReportData?.results[0]?.timeStamp}
+                  </span>
+                </p>
+
+                {singleReportData?.results[0]?.comment && (
+                  <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
+                    <label className="text-[#6C7275]">Comment</label>
+                    <p className="font-semibold text-[#000]">
+                      {singleReportLoading
+                        ? "Loading..."
+                        : singleReportData?.results[0]?.comment}
+                    </p>
+                  </div>
+                )}
+                <hr className="bg-[#E8ECEF]" />
+              </div>
+
+              {/* Updated Comment */}
+
+              <div className="mt-7">
+                <p className="font-semibold text-xl mb-3">Update #1:</p>
+                <p className="text-[#6C7275] text-base mb-1 font-semibold">
+                  Updated by:
+                  <span className="text-[#000] font-semibold ml-2">
+                    {" "}
+                    John Doe (case file officer)
+                  </span>
+                </p>
+
+                <p className="text-[#6C7275] text-base mb-1 font-semibold">
+                  Timestamp:
+                  <span className="text-[#000] font-semibold ml-2">
+                    {formattedDate}
+                  </span>
+                </p>
+
+                <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
+                  <label className="text-[#6C7275]">Comment </label>
+                  <input
+                    type="text"
+                    required
+                    name="updatedComment"
+                    placeholder="Type here..."
+                    value={updateReportComment}
+                    onChange={(e) => setUpdateReportComment(e.target.value)}
+                    className="border-none focus:outline-none bg-gray-100 w-full font-semibold"
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Button */}
+
+        {showCaseStatusStep0 && (
+          <div className="mt-7">
+            <button
+              onClick={handleChangeStatusCase}
+              className="bg-[#3FDD78] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
+            >
+              {isLoading ? "Opening..." : "Open case"}
+            </button>
+          </div>
+        )}
+
         {showCaseStatusStep1 && (
           <div className="mt-7">
             <button
@@ -309,16 +532,52 @@ const SpecificReport = () => {
         {showCaseStatusStep2 && (
           <div className="mt-7 flex justify-start items-center gap-5">
             <button
-              // onClick={handleOpenCaseStep1}
+              onClick={handleCloseCase}
               className="bg-[#3FDD78] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
             >
-              Close case
+              {closeCaseLoading ? "Closing..." : "Close case"}
             </button>
             <button
-              // onClick={handleOpenCaseStep1}
+              onClick={() => {
+                setShowCaseStatusStep3Update(true);
+                setShowCaseStatusStep2(false);
+                setShowCaseStatusStep1(false);
+              }}
               className="bg-[#000] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
             >
               Add Update
+            </button>
+          </div>
+        )}
+
+        {showCaseStatusStep3Update && (
+          <div className="mt-7 flex justify-start items-center gap-5">
+            <button
+              onClick={handleUpdateCase}
+              className="bg-[#3FDD78] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
+            >
+              {updateCaseLoading ? "Saving..." : " Save"}
+            </button>
+            <button
+              onClick={() => {
+                setShowCaseStatusStep3Update(false);
+                setShowCaseStatusStep2(true);
+                setShowCaseStatusStep1(false);
+              }}
+              className="bg-[#000] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+
+        {showCaseStatusStep4Final && (
+          <div className="mt-7">
+            <button
+              onClick={handleCloseCase}
+              className="bg-[#3FDD78] rounded-lg  py-2 px-3 border-none outline-none text-[#fff] "
+            >
+              {closeCaseLoading ? "Closing..." : "Close case"}
             </button>
           </div>
         )}
