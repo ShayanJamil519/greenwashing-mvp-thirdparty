@@ -69,9 +69,9 @@ const AllReports = () => {
 
       {/* Reports Container */}
       <div className="w-full gap-7 grid grid-cols-3">
-        {activeTab === 1 && <Report data={pendingReportsData} />}
-        {activeTab === 2 && <Report data={reviewReportsData} />}
-        {activeTab === 3 && <Report data={reviewedReportsData} />}
+        {activeTab === 1 && <Report data={pendingReportsData} activeTab={1} />}
+        {activeTab === 2 && <Report data={reviewReportsData} activeTab={2} />}
+        {activeTab === 3 && <Report data={reviewedReportsData} activeTab={3} />}
       </div>
     </div>
   );
@@ -86,7 +86,17 @@ const Report = ({ data, activeTab }) => {
     setCompany(report);
     // console.log("report: ", report);
 
-    setStep("specific_report");
+    if (activeTab === 1) {
+      setStep("specific_report");
+    }
+
+    if (activeTab === 2) {
+      setStep("review_progress");
+    }
+
+    if (activeTab === 3) {
+      setStep("review_completed");
+    }
   };
 
   return (
