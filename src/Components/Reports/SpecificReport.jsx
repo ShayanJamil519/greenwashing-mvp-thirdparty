@@ -33,6 +33,7 @@ const SpecificReport = () => {
       reviewing: "true",
       sentToRegulators: "false",
       reviewed: "false",
+      caseOpenedTimeStamp: formattedDate,
     })
   );
 
@@ -62,7 +63,7 @@ const SpecificReport = () => {
   const { mutate: addMutate, isLoading } = useAssignCase(
     JSON.stringify({
       ...reportAssignCaseData,
-      formattedDate,
+      caseAssignedTimeStamp: formattedDate,
       openedBy: "John Doe (case file officer)",
       company,
     })
@@ -108,7 +109,7 @@ const SpecificReport = () => {
     useUpdateCase(
       JSON.stringify({
         ...updateReportComment,
-        formattedDate,
+        caseUpdateTimeStamp: formattedDate,
 
         company,
       })
@@ -147,7 +148,7 @@ const SpecificReport = () => {
         company,
         reviewed: "true",
         reviewing: "false",
-        pending: "false",
+        sentToRegulators: "false",
       })
       // currentCountry
     );
@@ -334,7 +335,9 @@ const SpecificReport = () => {
               <p className="text-[#6C7275] text-base mb-1 font-semibold">
                 Timestamp:
                 <span className="text-[#000] font-semibold ml-2">
-                  {formattedDate}
+                  {specificReportDetailsLoading
+                    ? "Loading..."
+                    : specificReportDetailsData?.results?.caseOpenedTimeStamp}
                 </span>
               </p>
 
@@ -390,7 +393,7 @@ const SpecificReport = () => {
                 <span className="text-[#000] font-semibold ml-2">
                   {specificReportDetailsLoading
                     ? "Loading..."
-                    : specificReportDetailsData?.results?.timeStamp}
+                    : specificReportDetailsData?.results?.caseAssignedTimeStamp}
                 </span>
               </p>
 
@@ -434,7 +437,8 @@ const SpecificReport = () => {
                   <span className="text-[#000] font-semibold ml-2">
                     {specificReportDetailsLoading
                       ? "Loading..."
-                      : specificReportDetailsData?.results?.timeStamp}
+                      : specificReportDetailsData?.results
+                          ?.caseAssignedTimeStamp}
                   </span>
                 </p>
 
