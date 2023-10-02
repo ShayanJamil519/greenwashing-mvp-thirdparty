@@ -177,6 +177,12 @@ const SpecificReport = () => {
     isLoading: specificReportDetailsLoading,
   } = useGetSpecificReportDetails(specificReportDetailsID);
 
+  console.log("specificReportDetailsData: ", specificReportDetailsData);
+
+  const allClaim = JSON.parse(specificReportDetailsData?.results?.claims);
+
+  console.log("allClaim: ", allClaim);
+
   return (
     <div>
       <BackButton setStep={() => setStep("all_reports")} />
@@ -310,7 +316,7 @@ const SpecificReport = () => {
           <p className="text-[#6C7275] font-semibold mb-3">
             Sustainability claims:
           </p>
-          <p className="font-semibold text-[#000]">
+          {/* <p className="font-semibold text-[#000]">
             In 2019 we made €5 b available for green projects and last year we
             set a target for 70% of our lending to be green by 2030. We also
             became the first Irish bank to pledge to operate as carbon neutral
@@ -319,7 +325,26 @@ const SpecificReport = () => {
           <p className="text-[#6C7275] text-sm mt-3 font-semibold">
             Data source:
             <span className="text-[#000] font-semibold ml-2">Twitter</span>
-          </p>
+          </p> */}
+
+          {Object.entries(allClaim).map(([key, value]) => {
+            if (value) {
+              return (
+                <>
+                  <p className="font-semibold text-[#000]">
+                    {value.slice(0, 250)}
+                    {value.length > 250 && "..."}
+                  </p>
+                  <p className="text-[#6C7275] text-sm mt-3 font-semibold mb-4">
+                    Data source:
+                    <span className="text-[#000] font-semibold ml-2 ">
+                      {key}
+                    </span>
+                  </p>
+                </>
+              );
+            }
+          })}
 
           {/* case status step 1 */}
           {showCaseStatusStep1 && (
