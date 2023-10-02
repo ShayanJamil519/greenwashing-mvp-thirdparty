@@ -14,6 +14,10 @@ const AllReports = () => {
 
   const { data: pendingReportsData, isLoading: pendingReportLoading } =
     useGetAllPendingReports();
+
+  console.log("pendingReportsData");
+  console.log(pendingReportsData);
+
   const { data: reviewReportsData } = useGetAllUnderReviewReports();
   const { data: reviewedReportsData } = useGetAllReviewedReports();
 
