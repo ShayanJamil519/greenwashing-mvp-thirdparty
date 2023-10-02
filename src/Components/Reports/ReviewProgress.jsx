@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BackButton from "../Shared/BackButton";
 import { useStepsContext } from "../../Context/StateContext";
 import { toast } from "react-toastify";
@@ -145,7 +145,10 @@ const ReviewProgress = () => {
 
   console.log("specificReportDetailsData: ", specificReportDetailsData);
 
-  const allClaim = JSON.parse(specificReportDetailsData?.results?.claims);
+  // const allClaim = JSON.parse(specificReportDetailsData?.results?.claims);
+  const allClaim = specificReportDetailsData?.results?.claims
+    ? JSON.parse(specificReportDetailsData?.results?.claims)
+    : null;
 
   console.log("allClaim: ", allClaim);
 
@@ -289,7 +292,7 @@ const ReviewProgress = () => {
             <span className="text-[#000] font-semibold ml-2">Twitter</span>
           </p> */}
 
-          {Object.entries(allClaim).map(([key, value]) => {
+          {/* {Object.entries(allClaim).map(([key, value]) => {
             if (value) {
               return (
                 <>
@@ -306,7 +309,30 @@ const ReviewProgress = () => {
                 </>
               );
             }
-          })}
+          })} */}
+
+          {!specificReportDetailsLoading && allClaim ? (
+            Object.entries(allClaim).map(([key, value]) => {
+              if (value) {
+                return (
+                  <>
+                    <p className="font-semibold text-[#000]">
+                      {value.slice(0, 250)}
+                      {value.length > 250 && "..."}
+                    </p>
+                    <p className="text-[#6C7275] text-sm mt-3 font-semibold mb-4">
+                      Data source:
+                      <span className="text-[#000] font-semibold ml-2 ">
+                        {key}
+                      </span>
+                    </p>
+                  </>
+                );
+              }
+            })
+          ) : specificReportDetailsLoading ? (
+            <p>Loading claims...</p>
+          ) : null}
 
           {/* case status step 1 */}
           {showCaseStatusStep1 && (
