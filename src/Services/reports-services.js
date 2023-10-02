@@ -2,14 +2,29 @@ import axios from "axios";
 import apiUrl from "../utils/baseURL"
 
 class ReportService {
+
+
+  
+
+    /**
+   * getSingleReportDetail
+   * @returns
+   */
+    async getSpecificReport(id) {
+    const {data} = await axios.get(`${apiUrl}/api/report/getSingleReportDetail/${id}`)
+    return data;
+  }
+
+
+
   /**
    * getAllPendingReports
    * @returns
    */
-  async getAllPendingReports() {
-    const {data} = await axios.get(`${apiUrl}/api/report/getPendingReports`);
-    // console.log(data.results)
-    return data
+
+    async getAllPendingReports() {
+    const {data} = await axios.get(`${apiUrl}/api/report/getUpdateSendToRegulators`)
+    return data;
   }
 
 

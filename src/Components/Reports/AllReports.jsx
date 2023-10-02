@@ -6,12 +6,14 @@ import {
   useGetAllReviewedReports,
   useGetAllUnderReviewReports,
 } from "../../Hooks/reports-hooks";
+import PriorityColor from "./PriorityColor";
 
 const AllReports = () => {
   const [activeTab, setActiveTab] = useState(1);
   // const { setStep, rows } = useStepsContext();
 
-  const { data: pendingReportsData } = useGetAllPendingReports();
+  const { data: pendingReportsData, isLoading: pendingReportLoading } =
+    useGetAllPendingReports();
   const { data: reviewReportsData } = useGetAllUnderReviewReports();
   const { data: reviewedReportsData } = useGetAllReviewedReports();
 
@@ -68,8 +70,14 @@ const AllReports = () => {
       </div>
 
       {/* Reports Container */}
-      <div className="w-full gap-7 grid grid-cols-3">
-        {activeTab === 1 && <Report data={pendingReportsData} activeTab={1} />}
+      <div className="w-full gap-5 grid grid-cols-3">
+        {activeTab === 1 && (
+          <Report
+            data={pendingReportsData}
+            activeTab={1}
+            loading={pendingReportLoading}
+          />
+        )}
         {activeTab === 2 && <Report data={reviewReportsData} activeTab={2} />}
         {activeTab === 3 && <Report data={reviewedReportsData} activeTab={3} />}
       </div>
@@ -79,11 +87,12 @@ const AllReports = () => {
 
 export default AllReports;
 
-const Report = ({ data, activeTab }) => {
-  const { setStep, setCompany } = useStepsContext();
+const Report = ({ data, activeTab, loading }) => {
+  const { setStep, setCompany, setSpecificReportDetailsID } = useStepsContext();
 
-  const handleNavigate = async (report) => {
+  const handleNavigate = async (report, id) => {
     setCompany(report);
+    setSpecificReportDetailsID(id);
     // console.log("report: ", report);
 
     if (activeTab === 1) {
@@ -106,40 +115,59 @@ const Report = ({ data, activeTab }) => {
             <div
               key={index}
               // onClick={() => setStep("specific_report")}
-              onClick={() => handleNavigate(report?.companyName)}
+              onClick={() => handleNavigate(report?.companyName, report._id)}
               style={{
                 boxShadow:
                   " 0px 33px 32px -16px rgba(0, 0, 0, 0.10), 0px 0px 16px 4px rgba(0, 0, 0, 0.04)",
               }}
-              className="min-w-[31%] p-4 cursor-pointer rounded-xl hover:border-[1px] hover:border-black  "
+              className="p-4 cursor-pointer rounded-xl hover:border-[1px] hover:border-black  "
             >
-              <p className="mb-2 text-sm text-[#6C7275]">{report?.timeStamp}</p>
-              <h1 className="mb-3 text-[#000] text-xl font-semibold">
-                {report?.companyName}
-              </h1>
-              <p className="text-[#6C7275] text-sm mb-1">
-                Jurisdiction :
-                <span className="text-[#000] font-semibold ml-2 ">Ireland</span>
+              <p className="mb-2 text-sm text-[#6C7275]">
+                {loading
+                  ? "loading..."
+                  : report?.sendToRegulatorsTimeStamp &&
+                    report?.sendToRegulatorsTimeStamp}
               </p>
-              <p className="text-[#6C7275] text-sm mb-1">
+              <h1 className="mb-3 text-[#000] text-2xl font-semibold">
+                {loading ? "Loading..." : report?.companyName}
+              </h1>
+              <p className="text-[#6C7275] mr-3 font-semibold">
+                Jurisdiction :
+                <span className="text-[#000] font-semibold ml-2 text-sm ">
+                  Ireland
+                </span>
+              </p>
+              <p className="text-[#6C7275] mr-3 font-semibold">
                 Data sources :
-                <span className="text-[#000] font-semibold ml-2">
+                <span className="text-[#000] font-semibold ml-2 text-sm">
                   Sustainability Report, Twitter post
                 </span>
               </p>
-              <p className="text-[#6C7275] text-sm mb-1">
-                Age :
-                <span className="text-[#000] font-semibold ml-2">
+
+              <div className="flex justify-start items-center ">
+                <p className="text-[#6C7275] mr-3 font-semibold">Age:</p>
+                <label
+                  htmlFor="freshness"
+                  className="ml-2 text-[#000] font-semibold text-sm"
+                >
                   {report?.age}
-                </span>
-              </p>
-              <p className="text-[#6C7275] text-sm mb-1 flex items-center">
-                Priority :
-                <span className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></span>
-                <span className="text-[#000] font-semibold ml-2">
-                  {report?.priority}
-                </span>
-              </p>
+                </label>
+              </div>
+
+              <div className="flex justify-start items-center ">
+                <p className="text-[#6C7275] mr-3 font-semibold">Priority:</p>
+
+                <div className="flex justify-start items-center">
+                  <PriorityColor priority={report?.priority} />
+
+                  <label
+                    htmlFor="potentialgreenwashing"
+                    className="ml-2 text-[#000] font-semibold text-sm"
+                  >
+                    {report?.priority}
+                  </label>
+                </div>
+              </div>
             </div>
           ))
         : data?.message && <p>{data?.message}</p>}

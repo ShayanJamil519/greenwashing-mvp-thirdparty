@@ -13,10 +13,13 @@ export function StepsProvider({ children }) {
   const [rows, setRows] = useState();
   const [company, setCompany] = useState();
   const [description, setDescription] = useState();
+   const [specificReportDetailsID, setSpecificReportDetailsID] = useState("")
 
   return (
     <StepsContext.Provider
       value={{
+        specificReportDetailsID,
+        setSpecificReportDetailsID,
         openLoginModal,
         setOpenLoginModal,
         step,

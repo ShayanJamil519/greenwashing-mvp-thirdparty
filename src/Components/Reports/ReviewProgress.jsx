@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import {
   useAssignCase,
   useCloseCase,
-  useGetSingleReportDetails,
+  useGetSpecificReportDetails,
   useUpdateCase,
 } from "../../Hooks/reports-hooks";
 import { formattedDate } from "../../utils/date";
+import PriorityColor from "./PriorityColor";
 
 // ----------------------------
 const ReviewProgress = () => {
@@ -18,16 +19,7 @@ const ReviewProgress = () => {
     useState(false);
   const [showCaseStatusStep4Final, setShowCaseStatusStep4Final] =
     useState(false);
-  const { setStep, company, description } = useStepsContext();
-  const [predict, setPredict] = useState(
-    "A/B Group PLC provide contradictory statements as it claim to be green, carbon-neutral or Net Zero by 2030. The three concepts are either ambiguous (i.e. green) or contradictory, as the scope of Net Zero differs from the one of carbon neutral."
-  );
-  const [hash, setHash] = useState(
-    "74843f65ecfebbe8222e0ca8e971180ba180bd6d18c1a5336acae720d44f6dc"
-  );
-  const [etherscanURL, setEtherscanURL] = useState(
-    "https://sepolia.etherscan.io/address/0x008304060777174473caad642885846d1c969368"
-  );
+  const { setStep, company, specificReportDetailsID } = useStepsContext();
 
   // AssignCase
   const [reportAssignCaseData, setReportAssignCaseData] = useState({
@@ -146,9 +138,10 @@ const ReviewProgress = () => {
     );
   };
 
-  // getSingleReportDetail;
-  const { data: singleReportData, isLoading: singleReportLoading } =
-    useGetSingleReportDetails(company);
+  const {
+    data: specificReportDetailsData,
+    isLoading: specificReportDetailsLoading,
+  } = useGetSpecificReportDetails(specificReportDetailsID);
 
   return (
     <div>
@@ -167,7 +160,9 @@ const ReviewProgress = () => {
         <div className="mb-7">
           <div className="flex justify-between items-center">
             <p className="mb-2 text-sm text-[#2c2d2e] font-semibold">
-              Sep 8, 2023
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.sendToRegulatorsTimeStamp}
             </p>
 
             {showCaseStatusStep4Final && (
@@ -180,7 +175,11 @@ const ReviewProgress = () => {
               <img src="./assets/review__in__progress.png" alt="logo" />
             )}
           </div>
-          <h1 className="mb-5 text-[#000] text-2xl font-bold">{company}</h1>
+          <h1 className="mb-5 text-[#000] text-2xl font-bold">
+            {specificReportDetailsLoading
+              ? "Loading..."
+              : specificReportDetailsData?.results?.companyName}
+          </h1>
           <p className="text-[#6C7275] text-base mb-1 font-semibold">
             Jurisdiction :
             <span className="text-[#000] font-semibold ml-2">Ireland</span>
@@ -194,34 +193,36 @@ const ReviewProgress = () => {
           </p>
           {/* Links */}
           <div className="">
-            {hash && (
-              <>
-                <p className="mb-1 text-[#6C7275] text-base">
-                  <span className="font-bold"> Hash: </span>
-                  <a
-                    href={`https://gateway.pinata.cloud/ipfs/${hash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[#3FDD78] font-semibold"
-                  >
-                    {" "}
-                    {hash}
-                  </a>
-                </p>
-                <p className="text-[#6C7275] text-base">
-                  <span className="font-bold"> Etherscan URL: </span>
-                  <a
-                    href={etherscanURL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[#3FDD78] font-semibold"
-                  >
-                    {" "}
-                    {etherscanURL}{" "}
-                  </a>
-                </p>
-              </>
-            )}
+            <>
+              <p className="mb-1 text-[#6C7275] text-base">
+                <span className="font-bold"> Hash: </span>
+                <a
+                  href={`https://gateway.pinata.cloud/ipfs/${specificReportDetailsData?.results?.IPFSHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#3FDD78] font-semibold"
+                >
+                  {" "}
+                  {specificReportDetailsLoading
+                    ? "Loading..."
+                    : specificReportDetailsData?.results?.IPFSHash}
+                </a>
+              </p>
+              <p className="text-[#6C7275] text-base">
+                <span className="font-bold"> Etherscan URL: </span>
+                <a
+                  href={specificReportDetailsData?.results?.etherscanURL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#3FDD78] font-semibold"
+                >
+                  {" "}
+                  {specificReportDetailsLoading
+                    ? "Loading..."
+                    : specificReportDetailsData?.results?.etherscanURL}
+                </a>
+              </p>
+            </>
           </div>
         </div>
 
@@ -230,19 +231,37 @@ const ReviewProgress = () => {
           <p className="text-[#6C7275] mb-3 font-semibold">
             Summary of findings::
           </p>
-          <p className="font-semibold">{predict}</p>
+          <p className="font-semibold">
+            {" "}
+            {specificReportDetailsLoading
+              ? "Loading..."
+              : specificReportDetailsData?.results?.contradiction}
+          </p>
         </div>
 
         {/* Stats */}
-        <div className="my-5">
+        <div className="my-7">
           <p className="text-[#6C7275] text-base mb-1">
-            Age :<span className="text-[#000] font-semibold ml-2">Average</span>
+            Age :
+            <span className="text-[#000] font-semibold ml-2">
+              {" "}
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.age}
+            </span>
           </p>
 
           <p className="text-[#6C7275] text-base mb-3 flex items-center">
             Priority :
-            <div className="w-[17px] h-[17px] rounded-full bg-[#fff900] ml-2 inline-block"></div>
-            <span className="text-[#000] font-semibold ml-2">Medium</span>
+            <PriorityColor
+              priority={specificReportDetailsData?.results?.priority}
+            />
+            <span className="text-[#000] font-semibold ml-2">
+              {" "}
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.priority}
+            </span>
           </p>
 
           <hr className="bg-[#E8ECEF]" />
@@ -324,27 +343,27 @@ const ReviewProgress = () => {
                 Case assigned to:
                 <span className="text-[#000] font-semibold ml-2">
                   {" "}
-                  {singleReportLoading
+                  {specificReportDetailsLoading
                     ? "Loading..."
-                    : singleReportData?.results[0]?.assignedTo}
+                    : specificReportDetailsData?.results?.assignedTo}
                 </span>
               </p>
               <p className="text-[#6C7275] text-base mb-1 font-semibold">
                 Timestamp:
                 <span className="text-[#000] font-semibold ml-2">
-                  {singleReportLoading
+                  {specificReportDetailsLoading
                     ? "Loading..."
-                    : singleReportData?.results[0]?.timeStamp}
+                    : specificReportDetailsData?.results?.timeStamp}
                 </span>
               </p>
 
-              {singleReportData?.results[0]?.comment && (
+              {specificReportDetailsData?.results?.comment && (
                 <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
                   <label className="text-[#6C7275]">Comment (optional)</label>
                   <p className="font-semibold text-[#000]">
-                    {singleReportLoading
+                    {specificReportDetailsLoading
                       ? "Loading..."
-                      : singleReportData?.results[0]?.comment}
+                      : specificReportDetailsData?.results?.comment}
                   </p>
                 </div>
               )}
@@ -368,27 +387,27 @@ const ReviewProgress = () => {
                   Case assigned to:
                   <span className="text-[#000] font-semibold ml-2">
                     {" "}
-                    {singleReportLoading
+                    {specificReportDetailsLoading
                       ? "Loading..."
-                      : singleReportData?.results[0]?.assignedTo}
+                      : specificReportDetailsData?.results?.assignedTo}
                   </span>
                 </p>
                 <p className="text-[#6C7275] text-base mb-1 font-semibold">
                   Timestamp:
                   <span className="text-[#000] font-semibold ml-2">
-                    {singleReportLoading
+                    {specificReportDetailsLoading
                       ? "Loading..."
-                      : singleReportData?.results[0]?.timeStamp}
+                      : specificReportDetailsData?.results?.timeStamp}
                   </span>
                 </p>
 
-                {singleReportData?.results[0]?.comment && (
+                {specificReportDetailsData?.results?.comment && (
                   <div className="p-3 mt-5 mb-5 border-[1px] rounded-lg bg-gray-100 border-[#b6bdc0] flex flex-col gap-2">
                     <label className="text-[#6C7275]">Comment</label>
                     <p className="font-semibold text-[#000]">
-                      {singleReportLoading
+                      {specificReportDetailsLoading
                         ? "Loading..."
-                        : singleReportData?.results[0]?.comment}
+                        : specificReportDetailsData?.results?.comment}
                     </p>
                   </div>
                 )}

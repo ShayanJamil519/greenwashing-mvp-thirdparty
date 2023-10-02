@@ -2,10 +2,25 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import ReportService from "../Hooks/reports-hook"
 import ReportService from "../Services/reports-services"
 
-const useGetAllPendingReports = () => {
-    return useQuery({  queryKey: ['getPendingReports'],  queryFn: () => ReportService.getAllPendingReports()
-  })
+
+
+const useGetSpecificReportDetails = (id) => {
+  return useQuery({
+    queryKey: ["getSingleReportDetail"], 
+    queryFn: () => ReportService.getSpecificReport(id),
+  });
 };
+
+
+
+
+const useGetAllPendingReports = () => {
+  return useQuery({
+    queryKey: ["getUpdateSendToRegulators"], 
+    queryFn: () => ReportService.getAllPendingReports(),
+  });
+};
+
 
 
 
@@ -103,4 +118,4 @@ const useUpdateCase = (reportData) => {
 
 
 
-export { useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports,useCloseCase, useGetChangeStatusToReview ,useAssignCase, useUpdateCase, useGetSingleReportDetails };
+export { useGetSpecificReportDetails,useGetAllPendingReports, useGetAllUnderReviewReports, useGetAllReviewedReports,useCloseCase, useGetChangeStatusToReview ,useAssignCase, useUpdateCase, useGetSingleReportDetails };
