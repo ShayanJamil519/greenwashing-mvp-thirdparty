@@ -144,7 +144,9 @@ const Report = ({ data, activeTab, loading }) => {
               <p className="text-[#6C7275] mr-3 font-semibold">
                 Data sources :
                 <span className="text-[#000] font-semibold ml-2 text-sm">
-                  Sustainability Report, Twitter post
+                  {loading
+                    ? "loading..."
+                    : report?.dataSources && report?.dataSources}
                 </span>
               </p>
 

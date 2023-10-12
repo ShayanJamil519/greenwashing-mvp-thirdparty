@@ -231,9 +231,11 @@ const SpecificReport = () => {
           </p>
 
           <p className="text-[#6C7275] text-base font-semibold mb-1">
-            Data sources: :
+            Data sources:
             <span className="text-[#000] font-semibold ml-2">
-              2022 Sustainability Report, Twitter post 2021
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.dataSources}
             </span>
           </p>
           {/* Links */}
@@ -242,7 +244,7 @@ const SpecificReport = () => {
               <p className="mb-1 text-[#6C7275] text-base">
                 <span className="font-bold"> Hash: </span>
                 <a
-                  href={`https://gateway.pinata.cloud/ipfs/${specificReportDetailsData?.results?.IPFSHash}`}
+                  href={`https://ipfs.io/ipfs/${specificReportDetailsData?.results?.IPFSHash}`}
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3FDD78] font-semibold"
