@@ -191,7 +191,12 @@ const ReviewProgress = () => {
           </h1>
           <p className="text-[#6C7275] text-base mb-1 font-semibold">
             Jurisdiction :
-            <span className="text-[#000] font-semibold ml-2">Ireland</span>
+            <span className="text-[#000] font-semibold ml-2">
+              {" "}
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.jurisdiction}
+            </span>
           </p>
 
           <p className="text-[#6C7275] text-base font-semibold mb-1">
@@ -240,7 +245,7 @@ const ReviewProgress = () => {
         {/* Verdict */}
         <div className="bg-[#F3F5F7] p-3 rounded-md mb-7">
           <p className="text-[#6C7275] mb-3 font-semibold">
-            Summary of findings::
+            Summary of findings:
           </p>
           <p className="font-semibold">
             {" "}

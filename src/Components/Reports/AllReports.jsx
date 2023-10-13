@@ -138,7 +138,9 @@ const Report = ({ data, activeTab, loading }) => {
               <p className="text-[#6C7275] mr-3 font-semibold">
                 Jurisdiction :
                 <span className="text-[#000] font-semibold ml-2 text-sm ">
-                  Ireland
+                  {loading
+                    ? "loading..."
+                    : report?.jurisdiction && report?.jurisdiction}
                 </span>
               </p>
               <p className="text-[#6C7275] mr-3 font-semibold">

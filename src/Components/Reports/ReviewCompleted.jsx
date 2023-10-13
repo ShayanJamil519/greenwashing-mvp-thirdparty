@@ -44,7 +44,11 @@ const ReviewCompleted = () => {
           </h1>
           <p className="text-[#6C7275] text-base mb-1 font-semibold">
             Jurisdiction :
-            <span className="text-[#000] font-semibold ml-2">Ireland</span>
+            <span className="text-[#000] font-semibold ml-2">
+              {specificReportDetailsLoading
+                ? "Loading..."
+                : specificReportDetailsData?.results?.jurisdiction}
+            </span>
           </p>
 
           <p className="text-[#6C7275] text-base font-semibold mb-1">
